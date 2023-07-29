@@ -7,6 +7,7 @@ import { BiMessageSquare } from "react-icons/bi";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib";
 import LoadSpinner from "./LoadSpinner";
+import Link from "next/link";
 
 export default async function ConversationList() {
   const session = await getServerSession(authOptions);
@@ -24,7 +25,7 @@ export default async function ConversationList() {
       // # return all chat conversations of user
       return tx.chatConversation.findMany({
         where: {
-          id: user.id,
+          userId: user.id,
         },
         include: {
           messages: true,
@@ -52,7 +53,8 @@ export default async function ConversationList() {
       )}
 
       {conversations.map((c, idx) => (
-        <div
+        <Link
+          href={`/${c.id}`}
           key={idx}
           className="rounded-md cursor-pointer flex gap-2 mb-2 px-4 py-3 relative items-center transition ease-in-out duration-100 hover:bg-slate-700"
         >
@@ -60,7 +62,7 @@ export default async function ConversationList() {
           <p className="ml-2 text-white text-sm">
             {c.title || `Default Title ${idx}`}
           </p>
-        </div>
+        </Link>
       ))}
     </div>
   );

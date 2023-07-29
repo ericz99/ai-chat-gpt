@@ -16,12 +16,17 @@ export default function ChatMessageBox({
   value,
   onKeyDown,
   hasInitialResponse,
+  onHandleRegenerate,
 }: ChatMessageBoxProps) {
   return (
     <div className="flex w-full py-12 border-t-2 border-solid flex-col gap-8">
       {hasInitialResponse && (
         <div className="w-full max-w-4xl mx-auto container flex items-center justify-center">
-          <button type="button" className="p-4 border-2 border-black/10">
+          <button
+            type="button"
+            className="p-4 border-2 border-black/10"
+            onClick={onHandleRegenerate}
+          >
             <div className="flex gap-4">
               <BiRefresh color="gray" size={24} />
               Regenerate Response

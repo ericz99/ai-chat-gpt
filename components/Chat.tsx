@@ -13,10 +13,11 @@ type ChatProps = {
   initialMessages?: Message[];
 };
 
-export default function Chat({ initialMessages }: ChatProps) {
+export default function Chat({ initialMessages, id }: ChatProps) {
   const $formRef = useRef<HTMLFormElement>(null);
   const $answerRef = useRef<HTMLParagraphElement>(null);
   const [prompt, setPrompt] = useState<string>("");
+  const [cache, setCache] = useState<string | null>(null);
   const [streaming, setStreaming] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
@@ -30,6 +31,7 @@ export default function Chat({ initialMessages }: ChatProps) {
 
   useEffect(() => {
     if (canRegenerate) {
+      console.log("gen?");
       if ($formRef.current) {
         // # directly submit format again
         $formRef.current?.requestSubmit();
@@ -76,6 +78,7 @@ export default function Chat({ initialMessages }: ChatProps) {
     fetchEventSource("/api/chat", {
       method: "POST",
       body: JSON.stringify({
+        chatId: id,
         messages:
           chatHistory.length === 0
             ? [
@@ -129,6 +132,7 @@ export default function Chat({ initialMessages }: ChatProps) {
       },
     });
 
+    setCache(prompt);
     setPrompt("");
     setCanRegenerate(false);
   };

@@ -26,7 +26,7 @@ export async function POST(req: Request, res: Response) {
     const session = await getServerSession(authOptions);
     const { messages, chatId } = (await req.json()) as RequestBody;
 
-    const chat = await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx) => {
       const chatConversation = await tx.chatConversation.findFirst({
         where: {
           id: chatId,
@@ -43,7 +43,7 @@ export async function POST(req: Request, res: Response) {
               id: session?.user.id,
             },
           },
-          title: "something",
+          title: chatId,
         },
       });
     });

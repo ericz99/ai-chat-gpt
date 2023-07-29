@@ -3,7 +3,6 @@ import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
 import { createId } from "@paralleldrive/cuid2";
 
-import { prisma } from "@/lib";
 import { Chat } from "@/components";
 
 export default async function Home() {

@@ -69,7 +69,7 @@ export default function Chat({ initialMessages, id }: ChatProps) {
         role: "user",
         content: `${
           canRegenerate
-            ? "Please regenerate new response for: " + prompt
+            ? "Please regenerate new response for: " + prompt ?? cache
             : prompt
         }`,
       },
@@ -89,13 +89,13 @@ export default function Chat({ initialMessages, id }: ChatProps) {
                 },
                 {
                   role: "user",
-                  content: prompt,
+                  content: prompt ?? cache,
                 },
               ]
             : [
                 {
                   role: "user",
-                  content: prompt,
+                  content: prompt ?? cache,
                 },
               ],
       }),

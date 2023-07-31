@@ -1,7 +1,11 @@
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useRef } from "react";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
 
 import SystemMessage from "./SystemMessage";
 import UserMessage from "./UserMessage";
+import { MemoizedReactMarkdown } from "./Markdown";
+import CodeBlock from "./CodeBlock";
 import { Message } from "@/lib";
 
 type ChatConversationProps = {
@@ -14,18 +18,17 @@ const ChatMessageList = forwardRef(function ChatMessageList(
   { streaming, error, chatHistory }: ChatConversationProps,
   ref: any
 ) {
-  const [isUserScrolling, setIsUserScrolling] = useState(false);
   const $messageListRef = useRef<HTMLDivElement>(null);
   const $scrollToBottomRef = useRef<HTMLDivElement>(null);
 
-  // useEffect(() => {
-  //   if (streaming && $scrollToBottomRef.current) {
-  //     // Scroll to the bottom when streaming
-  //     $scrollToBottomRef.current.scrollIntoView({
-  //       behavior: "smooth",
-  //     });
-  //   }
-  // }, [streaming]);
+  useEffect(() => {
+    if (streaming && $scrollToBottomRef.current) {
+      // Scroll to the bottom when streaming
+      $scrollToBottomRef.current.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  }, [streaming]);
 
   useEffect(() => {
     if (ref && streaming) {
@@ -39,13 +42,6 @@ const ChatMessageList = forwardRef(function ChatMessageList(
 
   useEffect(() => {
     if ($messageListRef.current) {
-      // Check if user has manually scrolled up
-
-      const isAtBottom =
-        $messageListRef.current.scrollHeight -
-          $messageListRef.current.scrollTop ===
-        $messageListRef.current.clientHeight;
-
       // Scroll to the bottom whenever chatHistory changes or streaming starts
       $messageListRef.current.scrollTop = $messageListRef.current.scrollHeight;
     }
